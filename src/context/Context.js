@@ -25,23 +25,14 @@ const DataContextProvider = ({ children }) => {
 
   const plus = (item) => {
     const plusData = data.map(element => {
-      return element.id == item.id ? { ...element, count: element.count + 1 } : element
+      return element.id === item.id ? { ...element, count: element.count + 1 } : element
     })
-
-    // const plusData = data.map(element => {
-    //   if(element.id == item.id){
-    //     return {...element, count: element.count + 1}
-    //   }
-    //   else{
-    //     return element;
-    //   }
-    // })
     setData(plusData);
   }
 
   const minus = (item) => {
     const minusData = data.map(element => {
-      if(element.id == item.id && element.count > 0){
+      if(element.id === item.id && element.count > 0){
         return { ...element, count: element.count - 1}
       } 
       else{
@@ -50,9 +41,24 @@ const DataContextProvider = ({ children }) => {
     })
     setData(minusData);
   }
+  let id = new Date().getTime().toString();
+  const [creatData, setCreate] = useState({
+    id:id,
+    ism: "",
+    yosh: ""
+  })
+  // input malumot saqlash 
+  const dataChange = (e) => {
+    setCreate({...creatData, [e.target.name]: e.target.value})
+  } 
+
+  const addButton = (e) => {
+    e.preventDefault();
+    setData([...data, {...creatData, id:id}])
+  }
 
   return (
-    <DataContext.Provider value={{ data, plus, minus}}>
+    <DataContext.Provider value={{ data, plus, minus, dataChange, creatData, addButton}}>
       {children}
     </DataContext.Provider>
   )
